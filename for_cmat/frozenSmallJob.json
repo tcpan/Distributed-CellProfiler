@@ -1,0 +1,16 @@
+{
+  "_comment1": "Paths in this file are relative to the root of your S3 bucket",
+  "pipeline": "Marklein/Microglia_Morphology_Project/Frozen_C20s/Universal_Frozen.cppipe", 
+  "data_file": "Marklein/Microglia_Morphology_Project/Frozen_C20s/frozen.csv", 
+  "input": "Marklein/Microglia_Morphology_Project/Frozen_C20s/",
+  "output": "Marklein/Microglia_Morphology_Project/Frozen_C20s_Output/",
+  "output_structure": "Metadata_Plate-Metadata_WellRow",
+  "_comment2": "The following groups are tasks, and each will be run in parallel",
+  "groups": [
+    {"Metadata": "Metadata_Plate=Plate_1,Metadata_WellRow=A"},
+    {"Metadata": "Metadata_Plate=Plate_1,Metadata_WellRow=B"},
+    {"Metadata": "Metadata_Plate=Plate_1,Metadata_WellRow=C"},
+    {"Metadata": "Metadata_Plate=Plate_1,Metadata_WellRow=D"}
+  ]
+}
+

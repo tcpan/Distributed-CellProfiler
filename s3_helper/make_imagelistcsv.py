@@ -56,7 +56,14 @@ else:
 
 # compile regex.
 # H4_-3_1_1_Stitched[Read 1_GFP 469,525]_001.tif
+# well id: $1
+# channel: $8
 prog = re.compile("^(([A-Z])([0-9]{1,2}))_(-[0-9]+)_([0-9])_([0-9]+)_Stitched\[Read ([0-9])_(.*) ([0-9]{3}),([0-9]{3})\]_([0-9]{3})\." + img_ext + "$")
+
+# A1_-1_1_1_Stitched[GFP 469,525]_001.tif
+# well id: $1
+# channel: $7
+prog2 = re.compile("^(([A-Z])([0-9]{1,2}))_(-[0-9]+)_([0-9])_([0-9]+)_Stitched\[(.*) ([0-9]{3}),([0-9]{3})\]_([0-9]{3})\." + img_ext + "$")
 # keeping 2, 3, and 8
 # 1 is combination of 2 and 3.
 
@@ -66,9 +73,14 @@ pos_list = []
 chan_list = []
 for f in files:
     result = prog.match(f)
-    pos_list.append(result.group(1))
-    chan_list.append(result.group(8).replace(" ", ""))
-    
+    result2 = prog2.match(f)
+    if result is not None:
+        pos_list.append(result.group(1))
+        chan_list.append(result.group(8).replace(" ", ""))
+    elif result2 is not None:
+        pos_list.append(result2.group(1))
+        chan_list.append(result2.group(7).replace(" ", ""))
+ 
 unique_pos = list(set(pos_list))
 unique_pos.sort()
 unique_chan = list(set(chan_list))
@@ -95,9 +107,15 @@ for chan in unique_chan:
 # then fill the rest of the table.
 for f in files:
     result = prog.match(f)
-    out.loc[result.group(1), 'FileName_' + result.group(8).replace(" ", "")] = f
-    out.loc[result.group(1), 'Metadata_WellRow'] = result.group(2)
-    out.loc[result.group(1), 'Metadata_WellColumn'] = result.group(3)
+    result2 = prog2.match(f)
+    if result is not None:
+        out.loc[result.group(1), 'FileName_' + result.group(8).replace(" ", "")] = f
+        out.loc[result.group(1), 'Metadata_WellRow'] = result.group(2)
+        out.loc[result.group(1), 'Metadata_WellColumn'] = result.group(3)
+    elif result2 is not None:
+        out.loc[result2.group(1), 'FileName_' + result2.group(7).replace(" ", "")] = f
+        out.loc[result2.group(1), 'Metadata_WellRow'] = result2.group(2)
+        out.loc[result2.group(1), 'Metadata_WellColumn'] = result2.group(3)
     
 
 # %%
